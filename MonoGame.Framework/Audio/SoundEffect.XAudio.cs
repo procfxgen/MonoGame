@@ -12,7 +12,7 @@ using SharpDX.X3DAudio;
 
 namespace Microsoft.Xna.Framework.Audio
 {
-    public sealed partial class SoundEffect : IDisposable
+    partial class SoundEffect
     {
 #if WINDOWS || (WINRT && !WINDOWS_PHONE)
 
@@ -135,35 +135,7 @@ namespace Microsoft.Xna.Framework.Audio
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="buffer">Buffer containing PCM wave data.</param>
-        /// <param name="sampleRate">Sample rate, in Hertz (Hz)</param>
-        /// <param name="channels">Number of channels (mono or stereo).</param>
-        private void PlatformInitialize(byte[] buffer, int sampleRate, AudioChannels channels)
-        {
-            var wf = new WaveFormat(sampleRate, (int)channels);
-
-            var loopLengthSamples = (int)(buffer.Length / ((wf.Channels * wf.BitsPerSample) / 8));
-
-            CreateBuffers(wf,
-                            DataStream.Create(buffer, true, false),
-                            0,
-                            loopLengthSamples);
-        }
-
-        /// <summary>
-        /// PlatformInitialize
-        /// </summary>
-        /// <param name="buffer">Buffer containing PCM wave data.</param>
-        /// <param name="offset">Offset, in bytes, to the starting position of the audio data.</param>
-        /// <param name="count">Amount, in bytes, of audio data.</param>
-        /// <param name="sampleRate">Sample rate, in Hertz (Hz)</param>
-        /// <param name="channels">Number of channels (mono or stereo).</param>
-        /// <param name="loopStart">The position, in samples, where the audio should begin looping.</param>
-        /// <param name="loopLength">The duration, in samples, that audio should loop over.</param>
-        private void PlatformInitialize(byte[] buffer, int offset, int count, int sampleRate, AudioChannels channels, int loopStart, int loopLength)
+        private void PlatformInitializePCM(byte[] buffer, int offset, int count, int sampleRate, AudioChannels channels, int loopStart, int loopLength)
         {
             CreateBuffers(new WaveFormat(sampleRate, (int)channels),
                             DataStream.Create(buffer, true, false, offset),
@@ -171,10 +143,22 @@ namespace Microsoft.Xna.Framework.Audio
                             loopLength);
         }
 
-        /// <summary>
-        /// PlatformInitialize
-        /// </summary>
-        /// <param name="s">Stream object containing PCM wave data.</param>
+        private void PlatformInitializeFormat(byte[] buffer, int format, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
+        {
+            WaveFormat waveFormat;
+            if (format == 1)
+                waveFormat = new WaveFormat(sampleRate, channels);
+            else if (format == 2)
+                waveFormat = new WaveFormatAdpcm(sampleRate, channels, blockAlignment);
+            else
+                throw new NotSupportedException("Unsupported wave format!");
+
+            CreateBuffers(waveFormat,
+                            DataStream.Create(buffer, true, false),
+                            loopStart,
+                            loopLength);
+        }
+
         private void PlatformLoadAudioStream(Stream s)
         {
             var soundStream = new SoundStream(s);
@@ -186,13 +170,6 @@ namespace Microsoft.Xna.Framework.Audio
                             sampleLength);
         }
 
-        /// <summary>
-        /// Create AudioBuffer 
-        /// </summary>
-        /// <param name="format">WAVE Format</param>
-        /// <param name="dataStream">Buffer containing PCM wave data.</param>
-        /// <param name="loopStart">The position, in samples, where the audio should begin looping.</param>
-        /// <param name="loopLength">The duration, in samples, that audio should loop over.</param>
         private void CreateBuffers(WaveFormat format, DataStream dataStream, int loopStart, int loopLength)
         {
             _format = format;
@@ -290,4 +267,5 @@ namespace Microsoft.Xna.Framework.Audio
         }
     }
 }
+
 
