@@ -74,6 +74,7 @@
     
 	<!-- General Stuff -->
 	<Compile Include="Global.cs" />
+	<Compile Include="XwtUtil.cs" />
 	<Compile Include="MainWindow.cs" />
 	<Compile Include="MainWindow.eto.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
@@ -85,10 +86,6 @@
       <Platforms>Windows</Platforms>
     </Compile>
 	<Compile Include="Styles.Windows.cs">
-      <Platforms>Windows</Platforms>
-    </Compile>
-	<Compile Include="Controls\ProjectControl.mac.cs">
-      <DependentUpon>ProjectControl.cs</DependentUpon>
       <Platforms>Windows</Platforms>
     </Compile>
     
@@ -105,10 +102,6 @@
 	<Compile Include="Styles.Linux.cs">
       <Platforms>Linux</Platforms>
     </Compile>
-	<Compile Include="Controls\ProjectControl.gtk.cs">
-      <DependentUpon>ProjectControl.cs</DependentUpon>
-      <Platforms>Linux</Platforms>
-    </Compile>
     
     <!-- Native Mac -->
 	<Compile Include="Global.Mac.cs">
@@ -118,26 +111,27 @@
 	<Compile Include="Styles.Mac.cs">
       <Platforms>MacOS</Platforms>
     </Compile>
-	<Compile Include="Controls\ProjectControl.mac.cs">
-      <DependentUpon>ProjectControl.cs</DependentUpon>
-      <Platforms>MacOS</Platforms>
-    </Compile>
 	
 	<!-- GUI Controls -->
 	<Compile Include="Controls\PropertyCells\CellBase.cs" />
 	<Compile Include="Controls\PropertyCells\CellBool.cs" />
+	<Compile Include="Controls\PropertyCells\CellChar.cs" />
 	<Compile Include="Controls\PropertyCells\CellColor.cs" />
 	<Compile Include="Controls\PropertyCells\CellCombo.cs" />
 	<Compile Include="Controls\PropertyCells\CellNumber.cs" />
 	<Compile Include="Controls\PropertyCells\CellPath.cs" />
 	<Compile Include="Controls\PropertyCells\CellRefs.cs" />
 	<Compile Include="Controls\PropertyCells\CellText.cs" />
+	<Compile Include="Controls\Pad.cs" />
+	<Compile Include="Controls\Pad.eto.cs">
+      <DependentUpon>Pad.cs</DependentUpon>
+    </Compile>
 	<Compile Include="Controls\BuildOutput.cs" />
 	<Compile Include="Controls\BuildOutput.eto.cs">
       <DependentUpon>BuildOutput.cs</DependentUpon>
     </Compile>
 	<Compile Include="Controls\ProjectControl.cs" />
-	<Compile Include="Controls\ProjectControl.eto.cs">
+	<Compile Include="Controls\ProjectControl.xwt.cs">
       <DependentUpon>ProjectControl.cs</DependentUpon>
     </Compile>
 	<Compile Include="Controls\PropertyGridControl.cs" />
@@ -187,6 +181,9 @@
     <EmbeddedResource Include="App.ico" />
     <EmbeddedResource Include="Icons\monogame.png">
       <LogicalName>Icons.monogame.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\Settings.png">
+      <LogicalName>Icons.Settings.png</LogicalName>
     </EmbeddedResource>
 	
 	<!--- The resources for treeview -->

@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Eto;
 using Eto.Forms;
@@ -86,6 +87,26 @@ namespace MonoGame.Tools.Pipeline
             };
         }
 
+        [GLib.ConnectBefore]
+        public static void TreeView_ButtonPressEvent(object o, Gtk.ButtonPressEventArgs args)
+        {
+            var treeview = o as Gtk.TreeView;
+
+            if (args.Event.Button == 3)
+            {
+                Gtk.TreeViewDropPosition pos;
+                Gtk.TreePath path;
+                Gtk.TreeIter iter;
+
+                if (treeview.GetDestRowAtPos((int)args.Event.X, (int)args.Event.Y, out path, out pos) && treeview.Model.GetIter(out iter, path))
+                {
+                    var paths = treeview.Selection.GetSelectedRows().ToList();
+                    if (paths.Contains(path))
+                        args.RetVal = true;
+                }
+            }
+        }
+
         public static void Load()
         {
             Style.Add<FormHandler>("MainWindow", h =>
@@ -118,7 +139,7 @@ namespace MonoGame.Tools.Pipeline
                 Connect(builder.GetObject("redo_button").Handle, MainWindow.Instance.cmdRedo);
                 Connect(builder.GetObject("close_button").Handle, MainWindow.Instance.cmdClose);
                 Connect(builder.GetObject("clean_button").Handle, MainWindow.Instance.cmdClean);
-                Connect(builder.GetObject("filteroutput_button").Handle, MainWindow.Instance.cmdFilterOutput);
+                //Connect(builder.GetObject("filteroutput_button").Handle, MainWindow.Instance.cmdFilterOutput);
                 Connect(builder.GetObject("debugmode_button").Handle, MainWindow.Instance.cmdDebugMode);
 
                 MainWindow.Instance.cmdBuild.EnabledChanged += (sender, e) =>
