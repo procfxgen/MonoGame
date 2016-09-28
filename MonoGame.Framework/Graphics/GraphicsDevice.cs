@@ -17,6 +17,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private bool _isDisposed;
 
+        private Color _blendFactor = Color.White;
+        private bool _blendFactorDirty;
+
         private BlendState _blendState;
         private BlendState _actualBlendState;
         private bool _blendStateDirty;
@@ -216,7 +219,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #if DEBUG
             if (DisplayMode == null)
             {
-                throw new ApplicationException(
+                throw new Exception(
                     "Unable to determine the current display mode.  This can indicate that the " +
                     "game is not configured to be HiDPI aware under Windows 10 or later.  See " +
                     "https://github.com/MonoGame/MonoGame/issues/5040 for more information.");
@@ -338,6 +341,25 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
+        /// <summary>
+        /// The color used as blend factor when alpha blending.
+        /// </summary>
+        /// <remarks>
+        /// When only changing BlendFactor, use this rather than <see cref="Graphics.BlendState.BlendFactor"/> to
+        /// only update BlendFactor so the whole BlendState does not have to be updated.
+        /// </remarks>
+        public Color BlendFactor
+        {
+            get { return _blendFactor; }
+            set
+            {
+                if (_blendFactor == value)
+                    return;
+                _blendFactor = value;
+                _blendFactorDirty = true;
+            }
+        }
+
         public BlendState BlendState
         {
 			get { return _blendState; }
@@ -369,6 +391,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 newBlendState.BindToGraphicsDevice(this);
 
                 _actualBlendState = newBlendState;
+
+                BlendFactor = _actualBlendState.BlendFactor;
 
                 _blendStateDirty = true;
             }
@@ -414,6 +438,12 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 _actualBlendState.PlatformApplyState(this);
                 _blendStateDirty = false;
+            }
+
+            if (_blendFactorDirty)
+            {
+                PlatformApplyBlendFactor();
+                _blendFactorDirty = false;
             }
 
             if (_depthStencilStateDirty)
