@@ -36,7 +36,8 @@ namespace MonoGame.Tools.Pipeline
             _iconEndSucceed = Global.GetEtoIcon("Build.EndSucceed.png");
             _iconEndFailed = Global.GetEtoIcon("Build.EndFailed.png");
             _iconSucceed = Global.GetEtoIcon("Build.Succeed.png");
-            _iconSucceedWithWarnings = Global.GetEtoIcon("Build.SucceedWithWarnings.png");
+            //_iconSucceedWithWarnings = Global.GetEtoIcon("Build.SucceedWithWarnings.png");
+            _iconSucceedWithWarnings = Global.GetEtoIcon("Build.Succeed.png");
 
             _items = new List<BuildItem>();
 
