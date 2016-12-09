@@ -104,6 +104,10 @@ namespace Microsoft.Xna.Framework
                 _winy = display.Y + display.Height / 2;
             }
 
+
+
+
+
             var initflags =
                 Sdl.Window.State.OpenGL |
                 Sdl.Window.State.Hidden |
@@ -173,8 +177,17 @@ namespace Microsoft.Xna.Framework
             }
 
             Sdl.GL.SetAttribute(Sdl.GL.Attribute.DoubleBuffer, 1);
+
+#if RASPBERRY
+            //GLES
+            Sdl.GL.SetAttribute(Sdl.GL.Attribute.ContextProfileMAsl, 0x0004);
+            Sdl.GL.SetAttribute(Sdl.GL.Attribute.ContextMajorVersion, 2);
+            Sdl.GL.SetAttribute(Sdl.GL.Attribute.ContextMinorVersion, 0);
+#else
             Sdl.GL.SetAttribute(Sdl.GL.Attribute.ContextMajorVersion, 2);
             Sdl.GL.SetAttribute(Sdl.GL.Attribute.ContextMinorVersion, 1);
+#endif
+
         }
 
         ~SdlGameWindow()

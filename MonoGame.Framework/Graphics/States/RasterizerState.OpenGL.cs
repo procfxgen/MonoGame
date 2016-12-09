@@ -61,14 +61,22 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-#if MONOMAC || WINDOWS || DESKTOPGL
-			if (FillMode == FillMode.Solid) 
-				GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-            else
-				GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-#else
+
+#if RASPBERRY
             if (FillMode != FillMode.Solid)
                 throw new NotImplementedException();
+#else
+
+    #if MONOMAC || WINDOWS || DESKTOPGL
+                if (FillMode == FillMode.Solid) 
+				    GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                else
+				    GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+    #else
+                if (FillMode != FillMode.Solid)
+                    throw new NotImplementedException();
+    #endif
+
 #endif
 
             if (force || this.ScissorTestEnable != device._lastRasterizerState.ScissorTestEnable)

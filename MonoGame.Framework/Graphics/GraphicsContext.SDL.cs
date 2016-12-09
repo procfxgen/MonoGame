@@ -36,13 +36,18 @@ namespace OpenGL
             
             SetWindowHandle(info);
             _context = Sdl.GL.CreateContext(_winHandle);
-
+            
             // GL entry points must be loaded after the GL context creation, otherwise some Windows drivers will return only GL 1.3 compatible functions
             try
             {
+#if RASPBERRY
+                OpenGL.GL.LoadEntryPointsES();
+#else
                 OpenGL.GL.LoadEntryPoints();
+#endif
+             
             }
-            catch (EntryPointNotFoundException)
+            catch (EntryPointNotFoundException _e)
             {
                 throw new PlatformNotSupportedException(
                     "MonoGame requires OpenGL 3.0 compatible drivers, or either ARB_framebuffer_object or EXT_framebuffer_object extensions." +

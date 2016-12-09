@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // OpenGL framebuffer objects
 #if OPENGL
-#if GLES
+#if GLES || RASPBERRY
             SupportsFramebufferObjectARB = true; // always supported on GLES 2.0+
             SupportsFramebufferObjectEXT = false;
 #else

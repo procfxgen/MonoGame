@@ -254,6 +254,12 @@ namespace Microsoft.Xna.Framework.Graphics
 				_drawBuffers[i] = (DrawBuffersEnum)(FramebufferAttachment.ColorAttachment0Ext + i);
 #endif
             _extensions = GetGLExtensions();
+
+
+            var glversion = GL.GetString(StringName.Version);
+            Debug.WriteLine("GL version: {0}", glversion);
+
+
         }
 
         List<string> GetGLExtensions()
@@ -444,8 +450,10 @@ namespace Microsoft.Xna.Framework.Graphics
             else
                 GL.Viewport(value.X, PresentationParameters.BackBufferHeight - value.Y - value.Height, value.Width, value.Height);
             GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
-#if GLES
+#if GLES 
             GL.DepthRange(value.MinDepth, value.MaxDepth);
+#elif RASPBERRY
+            GL.DepthRangef(value.MinDepth, value.MaxDepth);
 #else
             GL.DepthRange(value.MinDepth, value.MaxDepth);
 #endif
